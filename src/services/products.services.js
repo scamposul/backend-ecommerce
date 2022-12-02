@@ -33,11 +33,12 @@ class ProductServices {
                 where: {id: cart_id}
             });
             if(findCart) {
-                const addProduct = inCart.create(product);
-                return addProduct;
+                const addProduct = await inCart.create(product);
+                return {findCart, addProduct};
             } else {
                 const cart = await Cart.create(newCart);
-                const addProduct = inCart.create(product);
+                await Cart.update({id: cart_id}, {where: {id: cart.id}})
+                const addProduct = await inCart.create(product);
                 return {cart, addProduct};
             }
         } catch (error) {

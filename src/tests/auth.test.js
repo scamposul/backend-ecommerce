@@ -25,9 +25,9 @@ describe("Pruebas para el endpoint /login", () => {
   });
 });
 
-afterAll(() => {
+afterAll(async () => {
   server.close();
-  db.close();
+  await db.close();
 });
 
 

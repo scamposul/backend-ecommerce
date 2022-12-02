@@ -105,7 +105,7 @@ const router = Router();
  *     summary: Agregar un producto al carrito
  *     tags: [Products]
  *     requestBody: 
- *       description: Se requieren las variables product_id, cart_id, quantity, price
+ *       description: Se requieren las variables product_id, cart_id, quantity, price, user_id
  *       required: true
  *       content: 
  *         application/json:

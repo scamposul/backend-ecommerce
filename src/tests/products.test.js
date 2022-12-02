@@ -2,6 +2,8 @@ const supertest = require("supertest");
 const { app, server } = require("../app");
 const db = require("../utils/database");
 const Products = require("../models/products.model");
+const inCart = require("../models/inCart.model");
+const Cart = require("../models/cart.model");
 
 const api = supertest(app);
 const token =
@@ -11,8 +13,8 @@ describe("Pruebas para el endpoint de products", () => {
   test("Probar que un get a products retorna un json", async () => {
     await api
       .get("/api/v1/products")
-      .set({ Authorization: token })
       .expect(200)
+      .set({ Authorization: token })
       .expect("Content-Type", /application\/json/);
   });
   test("Probar que un get a products retorna un arreglo", async () => {
@@ -29,6 +31,9 @@ describe("Pruebas para el endpoint de products", () => {
   }
   test("Probar que un post a products crea un nuevo producto", async () => {
     await api.post("/api/v1/products").set({ Authorization: token }).send(testProduct).expect(201);
+    await Products.destroy({ where: {
+      name: "Silo en bulto X 25 kg"
+  }});
   });
   test("Comprobar la información del producto creado", async () => {
     let postBody = [];
@@ -36,6 +41,9 @@ describe("Pruebas para el endpoint de products", () => {
     postBody.push(body);
     const products = postBody.filter((product) => testProduct.name === product.name);
     expect(products[0]).toMatchObject(testProduct);
+    await Products.destroy({ where: {
+      name: "Silo en bulto X 25 kg"
+  }});
   });
 });
 describe("Pruebas para el endpoint de /products/:user_id/:cart_id", () => {
@@ -55,27 +63,46 @@ describe("Pruebas para el endpoint de /products/:user_id/:cart_id", () => {
 });
 const productCart = {
     product_id: 1,
-    cart_id: 1,
+    cart_id: 2,
     quantity: 1,
+    user_id: 1,
     price: "5.00"
-}
+};
 describe("Pruebas para el endpoint de /products/:cart_id", () => {
-    test("Probar que un post a /products/1 agrega un producto al carro", async () => {
-        await api.post("/api/v1/products/1").set({ Authorization: token }).send(productCart).expect(201);
+    test("Probar que un post a /products/2 agrega un producto al carro", async () => {
+        await api.post("/api/v1/products/2").set({ Authorization: token }).send(productCart).expect(201);
+        await Cart.destroy({where: {id: productCart.cart_id}});
+        await inCart.destroy({where: {cart_id: productCart.cart_id}});
     });
     test("Comprobar la información del producto agregado", async () => {
-        let postBody = [];
-        const {body} = await api.post("/api/v1/products/1").set({ Authorization: token }).send(productCart);
-        postBody.push(body);
-        const products = postBody.filter((product) => productCart.product_id === product.product_id);
-        expect(products[0]).toMatchObject(productCart);
+      let postBody = [];
+      const {body} = await api.post("/api/v1/products/2").set({ Authorization: token }).send(productCart);
+      postBody.push(body);
+      const products = postBody.filter((product) => productCart.product_id === product.addProduct.product_id);
+      expect(products[0].addProduct.product_id).toEqual(productCart.product_id);
+      await Cart.destroy({where: {id: productCart.cart_id}});
+      await inCart.destroy({where: {cart_id: productCart.cart_id}});
     });
 })
 
-afterAll(async () => {
-    await Products.destroy({ where: {
-        name: "Silo en bulto X 25 kg"
-    }});
+afterAll(() => {
   server.close();
   db.close();
 });
+
+// const productCart = {
+//   product_id: 1,
+//   cart_id: 2,
+//   quantity: 1,
+//   user_id: 1,
+//   price: "5.00",
+// }
+// const addProduct = async () => {
+//   let postBody = [];
+//   const {body} = await api.post("/api/v1/products/2").set({ Authorization: token }).send(productCart);
+//   postBody.push(body);
+//   const products = postBody.filter((product) => productCart.product_id === product.addProduct.product_id);
+//   console.log(products[0].addProduct);
+// };
+
+// addProduct();
