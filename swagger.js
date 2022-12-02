@@ -7,7 +7,7 @@ const options = {
     info: {
       title: "El Charco de la Pava",
       version: "1.0.0",
-      description: "eCommerce de agroinsumos y herramientas",
+      description: "eCommerce de agroinsumos y herramientas. Todas las rutas están protegidas menos /users y /login",
     },
   },
   apis: [

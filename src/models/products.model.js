@@ -59,6 +59,9 @@ const { DataTypes } = require("sequelize");
  *         price: 
  *           type: string
  *           example: 5.00
+ *         user_id: 
+ *           type: string 
+ *           example: 1
  *   securitySchemes: 
  *     bearerAuth: 
  *       type: http
