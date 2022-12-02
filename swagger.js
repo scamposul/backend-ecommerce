@@ -30,7 +30,7 @@ const swaggerDocs = (app, port) => {
     res.send(swaggerSpec);
   });
   console.log(
-    `Documentación disponible en https://localhost:${port}/api/v1/docs`
+    `Documentación disponible en https://elcharcodelapava.onrender.com/api/v1/docs/`
   );
 };
 
