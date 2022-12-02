@@ -102,7 +102,7 @@ const router = Router();
  *   post: 
  *     security: 
  *       - bearerAuth: []
- *     summary: Comprar todos los productos de un carrito
+ *     summary: Agregar un producto al carrito
  *     tags: [Products]
  *     requestBody: 
  *       description: Se requieren las variables product_id, cart_id, quantity, price
