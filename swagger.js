@@ -30,7 +30,7 @@ const swaggerDocs = (app, port) => {
     res.send(swaggerSpec);
   });
   console.log(
-    `Documentación disponible en https://bscampoecommerce.up.railway.app:${port}/api/v1/docs`
+    `Documentación disponible en https://localhost:${port}/api/v1/docs`
   );
 };
 
