@@ -60,7 +60,7 @@ const { DataTypes } = require("sequelize");
  *           type: string
  *           example: 5.00
  *         user_id: 
- *           type: string 
+ *           type: integer 
  *           example: 1
  *   securitySchemes: 
  *     bearerAuth: 
